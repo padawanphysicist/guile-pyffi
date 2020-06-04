@@ -78,6 +78,23 @@ pyffi_Py_INCREF (SCM s_obj)
   return SCM_UNSPECIFIED;
 }
 
+static SCM
+pyffi_Py_DECREF (SCM s_obj)
+{
+  struct python_object *p_obj;
+  scm_assert_foreign_object_type (python_object_type, s_obj);
+  p_obj = scm_foreign_object_ref (s_obj, 0);
+  Py_DECREF (p_obj->p_data);
+  return SCM_UNSPECIFIED;
+}
+
+static SCM
+pyffi_Py_FinalizeEx (void)
+{
+  int status = Py_FinalizeEx ();
+  return scm_from_int (status);
+}
+
 void
 init_python ()
 {
@@ -90,4 +107,6 @@ init_python ()
   scm_c_define_gsubr ("PyImport_AddModule", 1, 0, 0, &pyffi_PyImport_AddModule);
   scm_c_define_gsubr ("PyModule_GetDict", 1, 0, 0, &pyffi_PyModule_GetDict);
   scm_c_define_gsubr ("Py_INCREF", 1, 0, 0, &pyffi_Py_INCREF);
+  scm_c_define_gsubr ("Py_DECREF", 1, 0, 0, &pyffi_Py_DECREF);
+  scm_c_define_gsubr ("Py_FinalizeEx", 0, 0, 0, &pyffi_Py_FinalizeEx);
 }
