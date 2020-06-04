@@ -1,3 +1,0 @@
-#+title: guile-pyffi
-
-[[https://www.gnu.org/software/guile/][Guile]] scheme interface for the [[https://www.python.org/][Python]] programming language. This extension uses the [[https://docs.python.org/3/c-api/index.html][Python/C API]] to invoke Python procedures and methods from within Guile, and convert data between the Python and Guile representations.
