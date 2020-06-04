@@ -3,10 +3,11 @@
 #include <libguile.h>
 #include <stdio.h>
 
-SCM python_object_type;
+static SCM python_object_type;
 
 struct python_object {
   PyObject* p_data;
+  SCM name;
   SCM update_func;
 };
 
@@ -30,7 +31,7 @@ pyffi_Py_Initialize (void)
   return SCM_UNSPECIFIED;
 }
 
-SCM
+static SCM
 pyffi_Py_IsInitialized ()
 {
   int status = Py_IsInitialized ();
@@ -45,16 +46,14 @@ pyffi_PyImport_AddModule (SCM s_module)
 
   p_module = (struct python_object *) scm_gc_malloc (sizeof (struct python_object), "PythonObject");
   c_name = scm_to_locale_string (s_module);
-  printf("before: %s\n", c_name);
   p_module->p_data = PyImport_AddModule (c_name);
   free(c_name);
-  puts("after");
   p_module->update_func = SCM_BOOL_F;
 
   return scm_make_foreign_object_1 (python_object_type, p_module);
 }
 
-SCM
+static SCM
 pyffi_PyModule_GetDict (SCM s_module)
 {
   struct python_object *p_module;
@@ -62,14 +61,14 @@ pyffi_PyModule_GetDict (SCM s_module)
   p_module = scm_foreign_object_ref (s_module, 0);
 
   struct python_object *p_dict;
-  p_dict   = (struct python_object *) scm_gc_malloc (sizeof (struct python_object), "PythonObject");
+  p_dict = (struct python_object *) scm_gc_malloc (sizeof (struct python_object), "PythonObject");
   p_dict->p_data = PyModule_GetDict (p_module->p_data);
   p_dict->update_func = SCM_BOOL_F;
 
   return scm_make_foreign_object_1 (python_object_type, p_dict);
 }
 
-SCM
+static SCM
 pyffi_Py_INCREF (SCM s_obj)
 {
   struct python_object *p_obj;
@@ -82,6 +81,10 @@ pyffi_Py_INCREF (SCM s_obj)
 void
 init_python ()
 {
+  /* Register PyObject as a foreign type */
+  init_python_object_type ();
+
+  /* Register wrapper function within guile */
   scm_c_define_gsubr ("Py_Initialize", 0, 0, 0, &pyffi_Py_Initialize);
   scm_c_define_gsubr ("Py_IsInitialized", 0, 0, 0, &pyffi_Py_IsInitialized);
   scm_c_define_gsubr ("PyImport_AddModule", 1, 0, 0, &pyffi_PyImport_AddModule);
