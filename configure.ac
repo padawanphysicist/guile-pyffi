@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 AC_PREREQ([2.69])
-AC_INIT([pyffi], [0.1.0], [victor_santos@fisica.ufc.br])
+AC_INIT([guile-pyffi], [0.1.0], [victor_santos@fisica.ufc.br])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
