@@ -25,3 +25,8 @@ ltmain.sh
 missing
 stamp-h1
 *.tar.gz
+*~
+*.log
+*.trs
+pyenv-*/
+pyffi/interface.scm
