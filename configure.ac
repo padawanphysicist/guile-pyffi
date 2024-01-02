@@ -21,7 +21,6 @@
 
 AC_INIT([guile-pyffi], [1.0.1], [victor_santos@fisica.ufc.br])
 AC_CONFIG_MACRO_DIRS([build-aux])
-#AC_CONFIG_MACRO_DIRS([build-aux])
 AC_CONFIG_SRCDIR(pyffi.scm)
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([color-tests -Wall -Wno-portability foreign])
@@ -51,15 +50,12 @@ fi
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 
-#AM_PROG_LIBTOOL
 # Init libtool
 LT_INIT([shared disable-static])
 
 # Checks for programs.
 AC_PROG_CC
-AM_PATH_PYTHON([3.11])
-#AC_SUBST(PYTHON_ABI,[`$PYTHON -c 'import sys; print("m") if int(sys.version_info.minor) < 8 else print("")'`])
-#AC_SUBST(pythonversion, [PYTHON_VERSION])
+AM_PATH_PYTHON([3.7])
 AC_SUBST(PYTHON_ABI,[`$PYTHON -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")'`])
 AC_CONFIG_FILES([Makefile libpyffi/Makefile pyffi/Makefile tests/Makefile])
 AC_CONFIG_FILES([env], [chmod +x env])

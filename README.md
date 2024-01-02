@@ -37,7 +37,7 @@ For more examples, take a look at the [examples](examples/) directory.
 
 ## Requirements
 - GNU Guile 3+
-- Python 3.11+
+- Python 3.7+
 
 # Installation
 If you are cloning the repository make sure you run the `bootstrap` script
