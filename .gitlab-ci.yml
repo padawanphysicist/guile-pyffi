@@ -2,8 +2,10 @@ image: padawanphysicist/python-guile
 
 build:
   script:
-    - ./autogen.sh
+    - ./bootstrap
     - ./configure
+    - make
+    - make check
     - make dist
   artifacts:
     paths:

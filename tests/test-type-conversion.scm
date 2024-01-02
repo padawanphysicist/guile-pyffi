@@ -1,29 +1,40 @@
-(use-modules (pyffi)
-             (ice-9 string-fun)
-             (srfi srfi-1)
-             (srfi srfi-69)
-             (srfi srfi-64))
+;;; (tests test-type-conversion) --- Test type conversion.
+
+;; Copyright (C) 2024 Victor Santos <victor_santos@fisica.ufc.br>
+;;
+;; This file is part of guile-pyffi.
+;;
+;; guile-pyffi is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; guile-pyffi is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with guile-pyffi. If not, see https://www.gnu.org/licenses/.
+
+;;; Commentary:
+
+;;; Code:
+
+(define-module (tests test-type-conversion)
+  #:use-module (pyffi)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-69)
+  #:use-module (srfi srfi-64)
+  #:use-module (tests runner))
+
+(test-runner-factory pyffi:test-runner)
 
 (define (test-alist-eq name alist1 alist2)
   (let ((sort-alist (lambda (v) (sort v (lambda (x y) (string<? (car x) (car y)))))))
     (test-equal name (sort-alist alist1) (sort-alist alist2))))
 
-(test-begin "python-vm")
-
-(test-group "test-interface"
-  (test-assert "Is libpython*.so loaded?" ((@ (system foreign-library) foreign-library?)
-                (@@ (pyffi interface) libpython)))
-  (test-assert "Can we call libpython*.so functions?" (procedure? (@ (pyffi interface) pyproc))))
-
-(test-group "python-vm-info"
-  (test-assert "Is Python VM NOT initialized?" (not ((@@ (pyffi init) python-initialized?))))
-  (python-initialize)
-  (test-assert "Is Python VM initialized?" ((@@ (pyffi init) python-initialized?)))
-  (pyimport sys)
-  (test-assert "Major version is either 3 or 2?" (member (vector-ref #.sys.version-info 0) '(3 2)))
-  (test-assert "sys.version is a string?" (string? #.sys.version))
-  (format #t "Python version: ~a\n" #.sys.version)
-  (python-finalize))
+(test-begin "type-conversion")
 
 (test-group "python->scheme type conversion"
  (python-initialize)
@@ -57,5 +68,6 @@
  (test-alist-eq "Scheme alist converts to python dict" '(("a" . 1) ("b" . 2) ("c" . 3)) (hash-table->alist (python->scm (scm->python (alist->hash-table '(("a" . 1) ("b" . 2) ("c" . 3)))))))
  (python-finalize))
 
-(test-end "python-vm")
+(test-end "type-conversion")
 
+;;; (tests test-type-conversion) ends here

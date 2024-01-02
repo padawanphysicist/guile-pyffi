@@ -1,5 +1,7 @@
 # guile-pyffi
 
+[![GNU Guile 3.0](https://github.com/padawanphysicist/guile-pyffi/actions/workflows/guile3.0.yml/badge.svg)](https://github.com/padawanphysicist/guile-pyffi/actions/workflows/guile3.0.yml)
+
 [Guile Scheme](https://www.gnu.org/software/guile/) interface to the [Python](https://www.python.org/) programming language.
 
 ## DISCLAIMER: The project is still in an experimental stage
@@ -35,18 +37,30 @@ For more examples, take a look at the [examples](examples/) directory.
 
 ## Requirements
 - GNU Guile 3+
-- Python 3.7+
+- Python 3.11+
 
-## Installation
-```shell
-$ ./bootstrap
-$ ./configure
-$ make
-$ sudo make install
-```
+# Installation
+If you are cloning the repository make sure you run the `bootstrap` script
+first:
+
+    $ ./bootstrap
+
+Then, run the typical sequence:
+
+    $ ./configure --prefix=<guile-prefix>
+    $ make
+    $ sudo make install
+
+Where `<guile-prefix>` should preferably be the same as your system Guile
+installation directory (e.g. /usr).
+
+It might be that you installed `guile-pyffi` somewhere differently than your
+system's Guile. If so, you need to indicate Guile where to find `guile-pyffi`, for
+example:
+
+    $ GUILE_LOAD_PATH=/usr/local/share/guile/site guile
 
 ## Usage
-
 Python objects are converted to Scheme according to the following table:  
 
 | Python          | Scheme                          |
@@ -98,6 +112,22 @@ Returns the Python representation of the given Scheme object.
 
 Returns the Scheme representation of the given Python object, or the corresponding pointer.
 
+# License
+
+Copyright (C) 2020-2024 Victor Santos <victor_santos@fisica.ufc.br>
+
+guile-pyffi is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3 of the License, or (at your
+option) any later version.
+
+guile-pyffi is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with guile-pyffi. If not, see https://www.gnu.org/licenses/.
 
 # Inspirations
 

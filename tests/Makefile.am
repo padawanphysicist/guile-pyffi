@@ -19,27 +19,13 @@
 # along with guile-pyffi. If not, see https://www.gnu.org/licenses/.
 #
 
-SUBDIRS = libpyffi pyffi tests
+TESTS = test-interface.scm test-python-vm.scm test-type-conversion.scm
 
-ACLOCAL_AMFLAGS = -I build-aux
+TEST_EXTENSIONS = .scm
 
-PKG_LIST_VERSION=$(shell echo $(PACKAGE_VERSION) | sed "s/\./ /g")
+SCM_LOG_COMPILER = $(top_builddir)/env $(GUILE)
+AM_SCM_LOG_FLAGS = --no-auto-compile -L $(top_srcdir)
 
-GOBJECTS = $(SOURCES:%.scm=%.go)
+CLEANFILES = $(TESTS:%.scm=%.log)
 
-moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)
-objdir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache
-
-nobase_mod_DATA = $(SOURCES) $(NOCOMP_SOURCES)
-nobase_nodist_obj_DATA = $(GOBJECTS)
-
-GUILE_WARNINGS = -Wunbound-variable -Warity-mismatch -Wformat
-SUFFIXES = .scm .go
-.scm.go:
-	$(top_builddir)/env $(GUILD) compile $(GUILE_TARGET) $(GUILE_WARNINGS) -o "$@" "$<"
-
-SOURCES = pyffi.scm
-
-CLEANFILES = $(GOBJECTS)
-
-EXTRA_DIST = $(SOURCES) $(NOCOMP_SOURCES) examples
+EXTRA_DIST = $(TESTS) runner.scm

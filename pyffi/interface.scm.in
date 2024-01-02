@@ -44,7 +44,7 @@
   #:use-module (system foreign)
   #:use-module (system foreign-library))
 
-(define libpython (load-foreign-library PYTHONSHAREDOBJ #:global? #t))
+(define libpython (load-foreign-library "libpython@PYTHON_ABI@" #:global? #t))
 
 (define-public (pyproc type name args)
   (pointer->procedure type (dynamic-func name libpython) args))
